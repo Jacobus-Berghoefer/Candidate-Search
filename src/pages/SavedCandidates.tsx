@@ -17,13 +17,15 @@ import CandidateCard from '../components/CandidateCard';
 const SavedCandidates = () => {
   const [savedCandidates, setSavedCandidates] = useState([]);
 
+
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('savedCandidates')) || [];
+    const saved = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
     setSavedCandidates(saved);
   }, []);
 
   return (
     <div>
+    <h1>Potential Candidates</h1>
       {savedCandidates.length > 0 ? (
         savedCandidates.map((candidate, index) => <CandidateCard key={index} candidate={candidate} />)
       ) : (

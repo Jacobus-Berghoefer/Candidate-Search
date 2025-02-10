@@ -1,7 +1,9 @@
 // Candidate Card with name, username, location, avatar, email, html_url, and company
-import React from 'react';
+// import React from 'react'; (delete?)
+import { Candidate } from '../../src/utils/interfaces/CandidateInfo';
 
-const CandidateCard = ({ candidate }) => {
+const CandidateCard: React.FC<{ candidate: Candidate }> = ({ candidate }) => {
+    if (!candidate) return <p>No candidate data available</p>;
   return (
     <div className='candidate-card'>
       <img src={candidate.avatar_url} alt={candidate.name} />

@@ -6,18 +6,24 @@
 // THEN an appropriate message should be shown indicating no more candidates are available
 
 import { useState, useEffect } from 'react';
-import { fetchCandidate } from '../API';
+import { searchGithub, searchGithubUser } from '../api/API';
 import CandidateCard from '../components/CandidateCard';
+
 
 const CandidateSearch = () => {
   const [candidate, setCandidate] = useState(null);
 
   useEffect(() => {
-    fetchCandidate().then(setCandidate);
+    searchGithub().then(users => {
+      if (users.length > 0) {
+        searchGithubUser(users[0].login).then(setCandidate);
+      }
+    });
   }, []);
 
   return (
     <div>
+    <h1>CandidateSearch</h1>
       {candidate ? <CandidateCard candidate={candidate} /> : <p>No more candidates available</p>}
     </div>
   );
