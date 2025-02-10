@@ -10,3 +10,27 @@
 
 // WHEN I click the "-" button
 // THEN the next candidate's information should be displayed without saving the current candidate
+
+import { useState, useEffect } from 'react';
+import CandidateCard from '../components/CandidateCard';
+
+const SavedCandidates = () => {
+  const [savedCandidates, setSavedCandidates] = useState([]);
+
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('savedCandidates')) || [];
+    setSavedCandidates(saved);
+  }, []);
+
+  return (
+    <div>
+      {savedCandidates.length > 0 ? (
+        savedCandidates.map((candidate, index) => <CandidateCard key={index} candidate={candidate} />)
+      ) : (
+        <p>No candidates have been accepted.</p>
+      )}
+    </div>
+  );
+};
+
+export default SavedCandidates;
