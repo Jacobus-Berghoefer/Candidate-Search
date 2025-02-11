@@ -12,22 +12,53 @@
 // THEN the next candidate's information should be displayed without saving the current candidate
 
 import { useState, useEffect } from 'react';
-import CandidateCard from '../components/CandidateCard';
+import RejectCandidate from '../components/RejectCandidate';
+import type { Candidate } from '../utils/interfaces/CandidateInfo';
 
 const SavedCandidates = () => {
-  const [savedCandidates, setSavedCandidates] = useState([]);
-
+  const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]);
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
     setSavedCandidates(saved);
   }, []);
 
+  const handleReject = (index: number) => {
+    const updatedCandidates = savedCandidates.filter((_, i) => i !== index);
+    setSavedCandidates(updatedCandidates);
+    localStorage.setItem('savedCandidates', JSON.stringify(updatedCandidates));
+  };
+
   return (
     <div>
-    <h1>Potential Candidates</h1>
+      <h1>Potential Candidates</h1>
       {savedCandidates.length > 0 ? (
-        savedCandidates.map((candidate, index) => <CandidateCard key={index} candidate={candidate} />)
+        <table className="candidate-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Location</th>
+              <th>Email</th>
+              <th>Company</th>
+              <th>Bio</th>
+              <th>Reject</th>
+            </tr>
+          </thead>
+          <tbody>
+            {savedCandidates.map((candidate: Candidate, index) => (
+              <tr key={index}>
+                <td><img src={candidate.avatar_url} alt={candidate.name} className="candidate-avatar" /></td>
+                <td><strong>{candidate.name}</strong> <em>({candidate.login})</em></td>
+                <td>{candidate.location || 'N/A'}</td>
+                <td><a href={`mailto:${candidate.email}`} className="email-link">{candidate.email || 'N/A'}</a></td>
+                <td>{candidate.company || 'N/A'}</td>
+                <td>{candidate.bio || 'N/A'}</td>
+                <td><RejectCandidate onNext={() => handleReject(index)} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
         <p>No candidates have been accepted.</p>
       )}

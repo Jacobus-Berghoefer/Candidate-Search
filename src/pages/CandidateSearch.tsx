@@ -7,26 +7,47 @@
 
 import { useState, useEffect } from 'react';
 import { searchGithub, searchGithubUser } from '../api/API';
+import type { Candidate } from '../utils/interfaces/CandidateInfo';
 import CandidateCard from '../components/CandidateCard';
+import AddCandidate from '../components/AddCandidate';
+import RejectCandidate from '../components/RejectCandidate';
 
 
 const CandidateSearch = () => {
-  const [candidate, setCandidate] = useState(null);
+    const [candidate, setCandidate] = useState<Candidate | null>(null);
+    
+    const fetchNewCandidate = () => {
+        searchGithub().then((users: Candidate[]) => {
+          if (users.length > 0) {
+            searchGithubUser(users[0].login).then((user) => {
+              if (user) setCandidate(user);
+            });
+          } else {
+            setCandidate(null);
+          }
+        });
+    };
 
-  useEffect(() => {
-    searchGithub().then(users => {
-      if (users.length > 0) {
-        searchGithubUser(users[0].login).then(setCandidate);
-      }
-    });
-  }, []);
+    useEffect(() => {
+        fetchNewCandidate();
+    }, []);
 
-  return (
-    <div>
-    <h1>CandidateSearch</h1>
-      {candidate ? <CandidateCard candidate={candidate} /> : <p>No more candidates available</p>}
-    </div>
-  );
-};
+    return (
+        <div>
+          <h1>Candidate Search</h1>
+          {candidate ? (
+            <>
+              <CandidateCard candidate={candidate} />
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '10px' }}>
+              <AddCandidate candidate={candidate} onNext={fetchNewCandidate} />
+              <RejectCandidate onNext={fetchNewCandidate} />
+              </div>
+            </>
+          ) : (
+            <p>No more candidates available</p>
+          )}
+        </div>
+      );
+    };
 
 export default CandidateSearch;

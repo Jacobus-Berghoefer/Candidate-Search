@@ -42,6 +42,7 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  text-align: center;
 }
 
 button {
@@ -119,3 +120,54 @@ tbody tr:nth-child(odd) {
   width: 80vw;
   table-layout: fixed;
 }
+
+.candidate-card {
+    background-color: black;
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+  }
+  
+  .avatar {
+    width: 100%;
+    border-radius: 10px;
+    background-color: white;
+  }
+
+  .candidate-avatar {
+    width: 100px;  /* Set fixed width */
+    height: 100px; /* Set fixed height */
+    object-fit: cover; /* Ensures image fills the box without distortion */
+    border-radius: 10%; /* Makes it circular */
+    border: 2px solid white; /* Adds a border for consistency */
+  }
+  
+  .card-content {
+    padding: 15px;
+  }
+  
+  .name {
+    font-weight: bold;
+  }
+  
+  .username {
+    font-style: italic;
+    color: #ccc;
+  }
+  
+  .email {
+    color: #4ea8de;
+    text-decoration: none;
+  }
+  
+  .email:hover {
+    text-decoration: underline;
+  }
+  
+  .bio {
+    font-style: italic;
+  }
